@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 import { Hono } from "hono";
 
 // Export the SpotifyMCP class so the Worker runtime can find it
+export const config = { runtime: 'edge' };
 export {SpotifyMCP};
 
 // Store registered clients in memory (in production, use a database)

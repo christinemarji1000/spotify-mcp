@@ -1,4 +1,4 @@
-import {SpotifyMCP} from "./SpotifyMCP.ts";
+import { SpotifyMCP } from './SpotifyMCP.js'
 import {spotifyBearerTokenAuthMiddleware, getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken} from "./lib/spotify-auth";
 import {cors} from "hono/cors";
 import {Hono} from "hono";

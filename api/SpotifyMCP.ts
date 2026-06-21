@@ -1,8 +1,8 @@
 import {McpAgent} from "agents/mcp";
 import {McpServer} from '@modelcontextprotocol/sdk/server/mcp.js'
 import {z} from 'zod'
-import {SpotifyService} from "./SpotifyService.ts";
-import {SpotifyAuthContext} from "../types";
+import { SpotifyService } from './SpotifyService.js';
+import { SpotifyAuthContext } from './lib/spotify-auth.js';
 
 /**
  * The `SpotifyMCP` class exposes the Spotify API via the Model Context Protocol

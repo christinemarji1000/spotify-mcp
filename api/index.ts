@@ -1,7 +1,7 @@
 import { SpotifyMCP } from './SpotifyMCP.js'
-import {spotifyBearerTokenAuthMiddleware, getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken} from "./lib/spotify-auth";
-import {cors} from "hono/cors";
-import {Hono} from "hono";
+import { spotifyBearerTokenAuthMiddleware, getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken } from "./lib/spotify-auth.js";
+import { cors } from "hono/cors";
+import { Hono } from "hono";
 
 // Export the SpotifyMCP class so the Worker runtime can find it
 export {SpotifyMCP};

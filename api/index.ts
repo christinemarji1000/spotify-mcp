@@ -1,5 +1,5 @@
-import { spotifyBearerTokenAuthMiddleware, getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken } from "./lib/spotify-auth.js"
-import { createSpotifyMCPServer } from './SpotifyMCP.js'
+import { spotifyBearerTokenAuthMiddleware, getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken } from "./lib/spotify-auth"
+import { createSpotifyMCPServer } from './SpotifyMCP'
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { cors } from "hono/cors"
 import { Hono } from "hono"
@@ -13,12 +13,11 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-// Explicit CORS configuration to handle browser "OPTIONS" preflight checks
 app.use('*', cors({
   origin: '*',
   allowMethods: ['GET', 'POST', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'X-Poke-Validator'],
-  exposeHeaders: ['Content-Length'],
+  exposeHeaders: ['Co ntent-Length'],
   maxAge: 600,
   credentials: true,
 }))
@@ -56,7 +55,7 @@ app.post('/token', async (c) => {
   if (body.grant_type === 'authorization_code') {
     const result = await exchangeCodeForToken(body.code as string, body.redirect_uri as string, clientId, clientSecret, body.code_verifier as string)
     return c.json(result)
-  } else if (body.grant_type === 'refresh_token') {
+  } else if (body.grant_type === 'refr esh_token') {
     const result = await refreshAccessToken(body.refresh_token as string, clientId, clientSecret)
     return c.json(result)
   }
@@ -65,26 +64,24 @@ app.post('/token', async (c) => {
 
 app.get('/sse', async (c) => {
   return streamSSE(c, async (stream) => {
-    // Send 1KB padding immediately to flush the Vercel buffer
-    await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) });
+    await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) })
     
-    // Extract token safely
-    const authHeader = c.req.header('Authorization');
-    con st accessToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : "";
+    const authHeader = c.req.header('Authorization')
+    const accessToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : ""
     
-    const transport = new SSEServerTransport("/message", stream as any);
-    const mcpServer = createSpotifyMCPServer(process.env, accessToken);
-    await mcpServer.connect(transport);
+    const transport = new SSEServerTransport("/message", stream as any)
+    const mcpServer = createSpotifyMCPServer(process.env, accessToken)
+    await mcpServer.connect(transport)
     
-    while (true) { await stream.sleep(1000); }
-  });
-});
+    while (true) { await stream.sleep(1000) }
+  })
+})
 
 app.post('/message', async (c) => {
-  return c.json({ message: "Message received" });
-});
+  return c.json({ message: "Message received" })
+})
 
-app.get('/', (c) => c.text('Spotify MCP Server is running'));
+app.get('/', (c) => c.text('Spotify MCP Server is running'))
 
-export const GET = handle(app);
-export const POST = handle(app);
+export const GET = handle(app)
+export const POST = handle(app)

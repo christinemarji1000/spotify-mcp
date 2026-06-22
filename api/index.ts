@@ -50,14 +50,15 @@ app.post('/token', async (c) => {
   return c.json({ error: 'unsupported_grant_type' }, 400)
 })
 
-app.get('/sse', spotifyBearerTokenAuthMiddleware, async (c) => {
-  const transport = new SSEServerTransport("/message", c.res as any)
-  const accessToken = c.get('spotifyAccessToken')
-  const mcpServer = createSpotifyMCPServer(process.env, accessToken)
-  await mcpServer.connect(transport)
-  return new Response(null, { status: 200 })
-})
-
+app.get('/sse', async (c, next) => {
+  if (!c.req.header('Authorization')) {
+    const transport = new SSEServerTransport("/message", c.res as any);
+    const mcpServer = createSpotifyMCPServer(process.env, "");
+    await mcpServer.connect(transport);
+    return new Response(null, { status: 200 });
+  }
+  return spotifyBearerTokenAuthMiddleware(c, next);
+}, async (c) =>
 app.post('/message', async (c) => {
   return c.json({ message: "Message received" })
 })

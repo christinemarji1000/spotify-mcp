@@ -58,7 +58,7 @@ app.get('/sse', async (c, next) => {
     return new Response(null, { status: 200 });
   }
   return spotifyBearerTokenAuthMiddleware(c, next);
-}, async (c) => {
+},async (c) => {
   const transport = new SSEServerTransport("/message", c.res as any);
   const accessToken = c.get('spotifyAccessToken');
   const mcpServer = createSpotifyMCPServer(process.env, accessToken);

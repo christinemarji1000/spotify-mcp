@@ -14,6 +14,9 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.use(cors())
+app.get('/health', (c) => {
+  return c.json({ status: "ok" })
+  })
 
 app.get('/.well-known/oauth-authorization-server', async (c) => {
   const url = new URL(c.req.url)

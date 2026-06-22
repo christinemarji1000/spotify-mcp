@@ -31,7 +31,7 @@ app.get('/.well-known/oauth-authorization-server', async (c) => {
       'user-read-private', 'user-read-email', 'user-read-playback-state',
       'user-modify-playback-state', 'user-read-currently-playing',
       'user-read-recently-played', 'user-top-read', 'playlist-read-private',
-      'playlist-read-collaborative', 'playlist-modify-public ',
+      'playlist-read-collaborative', 'playlist-modify-public',
       'playlist-modify-private', 'user-library-read', 'user-library-modify'
     ],
   });
@@ -60,7 +60,8 @@ app.post('/token', async (c) => {
       body.code_verifier as string | undefined
     );
     return c.json(result);
-  } else if (body.grant_type === 'refresh_token') {
+
+} else if (body.grant_type === 'refresh_token') {
     const result = await refreshAccessToken(
       body.refresh_token as string,
       c.env.SPOTIFY_CLIENT_ID,
@@ -72,7 +73,7 @@ app.post('/token', async (c) => {
 });
 
 app.use('/sse/*', spotifyBearerTokenAuthMiddleware);
-app.route('/sse', new Hono().mount('/', SpotifyMCP.serveSSE('/s se', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
+app.route('/sse', new Hono().mount('/', SpotifyMCP.serveSSE('/sse', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
 app.use('/mcp', spotifyBearerTokenAuthMiddleware);
 app.route('/mcp', new Hono().mount('/', SpotifyMCP.serve('/mcp', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
 

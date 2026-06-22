@@ -1,5 +1,5 @@
-import { spotifyBearerTokenAuthMiddleware, getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken } from "./lib/spotify-auth.js"
-import { createSpotifyMCPServer } from './SpotifyMCP.js'
+import { spotifyBearerTokenAuthMiddleware, getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken } from "./lib/spotify-auth"
+import { createSpotifyMCPServer } from './SpotifyMCP'
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { cors } from "hono/cors"
 import { Hono } from "hono"
@@ -75,6 +75,7 @@ app.get('/sse', async (c, next) => {
       while (true) { await stream.sleep(1000); }
     });
   })(c, next);
+})
 app.post('/message', async (c) => {
   return c.json({ message: "Message received" })
 })

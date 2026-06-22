@@ -4,6 +4,7 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { cors } from "hono/cors"
 import { Hono } from "hono"
 import { handle } from 'hono/vercel'
+import { streamSSE } from 'hono/streaming'
 
 type Bindings = {
   SPOTIFY_CLIENT_ID: string

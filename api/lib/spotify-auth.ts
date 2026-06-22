@@ -49,7 +49,7 @@ export async function refreshAccessToken(
     clientId: string,
     clientSecret: string
 ): Promise<{
-    ac cess_token: string
+    access_token: string
     token_type: string
     scope: string
     expires_in: number

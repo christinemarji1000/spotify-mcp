@@ -30,7 +30,7 @@ app.get('/authorize', async (c) => {
   const spotifyAuthUrl = new URL(getSpotifyAuthEndpoint('authorize'))
   const url = new URL(c.req.url)
   url.searchParams.forEach((v, k) => {
-    if (k !== 'client_id') spo tifyAuthUrl.searchParams.set(k, v)
+    if (k !== 'client_id') spotifyAuthUrl.searchParams.set(k, v)
   })
   spotifyAuthUrl.searchParams.set('client_id', process.env.SPOTIFY_CLIENT_ID!)
   return c.redirect(spotifyAuthUrl.toString())

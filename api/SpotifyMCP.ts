@@ -5,8 +5,7 @@ import { SpotifyService } from './SpotifyService.js'
 export function createSpotifyMCPServer(env: any, accessToken: string, refreshToken?: string) {
   const spotifyService = new SpotifyService(env, accessToken, refreshToken)
 
-  const server = new McpServer({
-    const formatResponse = (description: string, data: unknown) => {
+  const formatResponse = (description: string, data: unknown) => {
     return {
       content: [
         {
@@ -16,11 +15,11 @@ export function createSpotifyMCPServer(env: any, accessToken: string, refreshTok
       ]
     }
   }
+
+  const server = new McpServer({
     name: 'Spotify Service',
     version: '1.0.0',
   })
-
-  
 
   server.tool('searchTracks', 'Search for tracks on Spotify', {
     query: z.string().describe('Search query for tracks'),
@@ -34,7 +33,7 @@ export function createSpotifyMCPServer(env: any, accessToken: string, refreshTok
     query: z.string().describe('Search query for artists'),
     limit: z.number().optional().default(20).describe('Maximum number of results (1-50)')
   }, async ({ query, limit }) => {
-    const res ults = await spotifyService.searchArtists(query, limit)
+    const results = await spotifyService.searchArtists(query, limit)
     return formatResponse('Artist search completed', results)
   })
 
@@ -53,7 +52,7 @@ export function createSpotifyMCPServer(env: any, accessToken: string, refreshTok
 
   server.tool('pausePlayback', "Pause the user's playback", {}, async () => {
     await spotifyService.pausePlayback()
-    return formatResponse('Playback paused', {})
+    retu rn formatResponse('Playback paused', {})
   })
 
   server.tool('resumePlayback', "Resume the user's playback", {}, async () => {
@@ -65,7 +64,6 @@ export function createSpotifyMCPServer(env: any, accessToken: string, refreshTok
     limit: z.number().optional().default(20),
     offset: z.number().optional().default(0)
   }, async ({ limit, offset }) => {
-
     const playlists = await spotifyService.getUserPlaylists(limit, offset)
     return formatResponse('User playlists retrieved', playlists)
   })

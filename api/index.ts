@@ -54,27 +54,16 @@ app.post('/token', async (c) => {
   return c.json({ error: 'unsupported_grant_type' }, 400)
 })
 
-app.get('/sse', async (c, next) => {
-  if (!c.req.header('Authorization')) {
-    return streamSSE(c, async (stream) => {
-      await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) });
-      const transport = new SSEServerTransport("/message", stream as any);
-      const mcpServer = createSpotifyMCPServer(process.env, "");
-      await mcpServer.connect(transport);
-      while (true) { await stream.sleep(1000); }
-    });
-  }
-  
-  return spotifyBearerTokenAuthMiddleware(c, async () => {
-    return streamSSE(c, async (stream) => {
-      await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) });
-      const accessToken = c.get('spotifyAccessToken');
-      const transport = new SSEServerTransport("/message", stream as any);
-      const mcpServer = createSpotifyMCPServer(process.env, accessToken);
-      await mcpServer.connect(transport);
-      while (true) { await stream.sleep(1000); }
-    });
-  })(c, next);
+app.get('/sse', async (c) => {
+  return streamSSE(c, async (stream) => {
+    await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) })
+    const authHeader = c.req.header('Authorization')
+    const accessToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : ""
+    const transport = new SSEServerTransport("/message", stream as any)
+    const mcpServer = createSpotifyMCPServer(process.env, accessToken)
+    await mcpServer.connect(transport)
+    while (true) { await stream.sleep(1000) }
+  })
 })
 app.post('/message', async (c) => {
   return c.json({ message: "Message received" })

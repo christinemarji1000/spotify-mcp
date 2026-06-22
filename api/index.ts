@@ -19,9 +19,9 @@ app.get('/.well-known/oauth-authorization-server', async (c) => {
   const url = new URL(c.req.url);
   return c.json({
     issuer: url.origin,
-    authorization_endpoint: ${url.origin}/authorize,
-    token_endpoint: ${url.origin}/token,
-    registration_endpoint: ${url.origin}/register,
+    authorization_endpoint: \${url.origin}/authorize\,
+    token_endpoint: \${url.origin}/token\,
+    registration_endpoint: \${url.origin}/register\,
     response_types_supported: ['code'],
     response_modes_supported: ['query'],
     grant_types_supported: ['authorization_code', 'refresh_token'],
@@ -31,7 +31,7 @@ app.get('/.well-known/oauth-authorization-server', async (c) => {
       'user-read-private', 'user-read-email', 'user-read-playback-state',
       'user-modify-playback-state', 'user-read-currently-playing',
       'user-read-recently-played', 'user-top-read', 'playlist-read-private',
-      'playlist-read-collaborative', 'playlist-modify-public ',
+      'playlist-read-collaborative', 'playlist-modify-public',
       'playlist-modify-private', 'user-library-read', 'user-library-modify'
     ],
   });
@@ -72,7 +72,7 @@ app.post('/token', async (c) => {
 });
 
 app.use('/sse/*', spotifyBearerTokenAuthMiddleware);
-app.route('/sse', new Hono().mount('/', SpotifyMCP.serveSSE('/s se', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
+app.route('/sse', new Hono().mount('/', SpotifyMCP.serveSSE('/sse', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
 app.use('/mcp', spotifyBearerTokenAuthMiddleware);
 app.route('/mcp', new Hono().mount('/', SpotifyMCP.serve('/mcp', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
 

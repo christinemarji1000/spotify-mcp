@@ -13,17 +13,26 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-app.use(cors())
+// Explicit CORS configuration to handle browser "OPTIONS" preflight checks
+app.use('*', cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'X-Poke-Validator'],
+  exposeHeaders: ['Content-Length'],
+  maxAge: 600,
+  credentials: true,
+}))
+
 app.get('/health', (c) => {
   return c.json({ status: "ok" })
-  })
+})
 
 app.get('/.well-known/oauth-authorization-server', async (c) => {
   const url = new URL(c.req.url)
   return c.json({
     issuer: url.origin,
-    authorization_endpoint: `${url.origin}/authorize`,
-    token_endpoint: `${url.origin}/token`,
+    authorization_endpoint: ${url.origin}/authorize,
+    token_endpoint: ${url.origin}/token,
     response_types_supported: ['code'],
     grant_types_supported: ['authorization_code', 'refresh_token'],
   })
@@ -61,14 +70,12 @@ app.get('/sse', async (c) => {
     
     // Extract token safely
     const authHeader = c.req.header('Authorization');
-    const accessToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : "";
+    con st accessToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : "";
     
-    // Connect the MCP server
     const transport = new SSEServerTransport("/message", stream as any);
     const mcpServer = createSpotifyMCPServer(process.env, accessToken);
     await mcpServer.connect(transport);
     
-    // Keep the stream alive
     while (true) { await stream.sleep(1000); }
   });
 });

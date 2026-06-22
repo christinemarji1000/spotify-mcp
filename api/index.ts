@@ -2,6 +2,7 @@ import { SpotifyMCP } from './SpotifyMCP.js'
 import { spotifyBearerTokenAuthMiddleware, getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken } from "./lib/spotify-auth.js";
 import { cors } from "hono/cors";
 import { Hono } from "hono";
+import { handle } from 'hono/vercel'
 
 // Export the SpotifyMCP class so the Worker runtime can find it
 export {SpotifyMCP};
@@ -19,7 +20,7 @@ interface RegisteredClient {
 }
 const registeredClients = new Map<string, RegisteredClient>();
 
-export default new Hono<{ Bindings: Env }>()
+const app new Hono<{ Bindings: Env }>()
     .use(cors())
 
     // OAuth Authorization Server Discovery
@@ -129,3 +130,7 @@ export default new Hono<{ Bindings: Env }>()
 
     // Health check endpoint
     .get('/', (c) => c.text('Spotify MCP Server is running'))
+export const GET = handle(app)
+export const POST = handle(app)
+export const PUT = handle(app)
+export const DELETE = handle(app)

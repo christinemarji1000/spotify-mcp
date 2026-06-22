@@ -53,21 +53,23 @@ app.post('/token', async (c) => {
 
 app.get('/sse', async (c, next) => {
   if (!c.req.header('Authorization')) {
-    return streamSSE(c, async (stream) => {
+     return streamSSE(c, async (stream) => {
       await stream.writeSSE({ comment: 'heartbeat' });
       const transport = new SSEServerTransport("/message", stream as any);
       const mcpServer = createSpotifyMCPServer(process.env, "");
       await mcpServer.connect(transport);
       while (true) { await stream.sleep(1000); }
     });
+    });
   }
-  return spotifyBearerTokenAuthMiddleware(c, next);
-}, async (c) => {
   return streamSSE(c, async (stream) => {
     await stream.writeSSE({ comment: 'heartbeat' });
     const accessToken = c.get('spotifyAccessToken');
     const transport = new SSEServerTransport("/message", stream as any);
     const mcpServer = createSpotifyMCPServer(process.env, accessToken);
+    await mcpServer.connect(transport);
+    while (true) { await stream.sleep(1000); }
+  });
     await mcpServer.connect(transport);
     while (true) { await stream.sleep(1000); }
   });

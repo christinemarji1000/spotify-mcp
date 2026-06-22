@@ -65,13 +65,12 @@ app.get('/sse', async (c, next) => {
   await mcpServer.connect(transport);
   return new Response(null, { status: 200 });
 });
-  return spotifyBearerTokenAuthMiddleware(c, next);
-}, async (c) =>
+
 app.post('/message', async (c) => {
-  return c.json({ message: "Message received" })
-})
+  return c.json({ message: "Message received" });
+});
 
-app.get('/', (c) => c.text('Spotify MCP Server is ru nning'))
+app.get('/', (c) => c.text('Spotify MCP Server is running'));
 
-export const GET = handle(app)
-export const POST = handle(app)
+export const GET = handle(app);
+export const POST = handle(app);

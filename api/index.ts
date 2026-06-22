@@ -18,8 +18,8 @@ app.get('//.well-known/oauth-authorization-server', async (c) => {
   const url = new URL(c.req.url)
   return c.json({
     issuer: url.origin,
-    authorization_endpoint: ${url.origin}/authorize,
-    token_endpoint: ${url.origin}/token,
+    authorization_endpoint: \${url.origin}/authorize\,
+    token_endpoint: \${url.origin}/token\,
     response_types_supported: ['code'],
     grant_types_supported: ['authorization_code', 'refresh_token'],
   })

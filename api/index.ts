@@ -75,30 +75,3 @@ app.get('/sse', async (c, next) => {
       while (true) { await stream.sleep(1000); }
     });
   })(c, next);
-app.get('/sse', async (c) => {
-  return streamSSE(c, async (stream) => {
-    // Send 1KB padding immediately to flush the Vercel buffer
-    await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) });
-    
-    // Extract token safely
-    const authHeader = c.req.header('Authorization');
-    const accessToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : "";
-    
-    // Connect the MCP server
-    const transport = new SSEServerTransport("/message", stream as any);
-    const mcpServer = createSpotifyMCPServer(process.env, accessToken);
-    await mcpServer.connect(transport);
-    
-    // Keep the stream alive
-    while (true) { await stream.sleep(1000); }
-  });
-});
-
-app.post('/message', async (c) => {
-  return c.json({ message: "Message received" });
-});
-
-app.get('/', (c) => c.text('Spotify MCP Server is running'));
-
-export const GET = handle(app);
-export const POST = handle(app);

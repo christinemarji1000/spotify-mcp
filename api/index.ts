@@ -15,7 +15,7 @@ const app = new Hono<{ Bindings: Bindings }>()
 
 app.use(cors())
 
-app.get('//.well-known/oauth-authorization-server', async (c) => {
+app.get('/.well-known/oauth-authorization-server', async (c) => {
   const url = new URL(c.req.url)
   return c.json({
     issuer: url.origin,

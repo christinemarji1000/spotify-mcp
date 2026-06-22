@@ -6,6 +6,16 @@ export function createSpotifyMCPServer(env: any, accessToken: string, refreshTok
   const spotifyService = new SpotifyService(env, accessToken, refreshToken)
 
   const server = new McpServer({
+    const formatResponse = (description: string, data: unknown) => {
+    return {
+      content: [
+        {
+          type: "text",
+          text: Success! ${description}\n\nResult:\n${JSON.stringify(data, null, 2)}
+        }
+      ]
+    }
+  }
     name: 'Spotify Service',
     version: '1.0.0',
   })

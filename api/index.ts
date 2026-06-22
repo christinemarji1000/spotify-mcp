@@ -75,3 +75,11 @@ app.get('/sse', async (c, next) => {
       while (true) { await stream.sleep(1000); }
     });
   })(c, next);
+app.post('/message', async (c) => {
+  return c.json({ message: "Message received" })
+})
+
+app.get('/', (c) => c.text('Spotify MCP Server is running'))
+
+export const GET = handle(app)
+export const POST = handle(app)

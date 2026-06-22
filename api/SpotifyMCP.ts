@@ -10,16 +10,7 @@ export function createSpotifyMCPServer(env: any, accessToken: string, refreshTok
     version: '1.0.0',
   })
 
-  const formatResponse = (description: string, data: unknown) => {
-    return {
-      content: [
-        {
-          type: "text",
-          text: Success! ${description}\n\nResult:\n${JSON.stringify(data, null, 2)}
-        }
-      ]
-    }
-  }
+  
 
   server.tool('searchTracks', 'Search for tracks on Spotify', {
     query: z.string().describe('Search query for tracks'),

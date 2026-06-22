@@ -60,16 +60,12 @@ app.get('/sse', async (c, next) => {
       await mcpServer.connect(transport);
       while (true) { await stream.sleep(1000); }
     });
-    });
   }
   return streamSSE(c, async (stream) => {
     await stream.writeSSE({ comment: 'heartbeat' });
     const accessToken = c.get('spotifyAccessToken');
     const transport = new SSEServerTransport("/message", stream as any);
     const mcpServer = createSpotifyMCPServer(process.env, accessToken);
-    await mcpServer.connect(transport);
-    while (true) { await stream.sleep(1000); }
-  });
     await mcpServer.connect(transport);
     while (true) { await stream.sleep(1000); }
   });

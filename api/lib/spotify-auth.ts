@@ -1,7 +1,7 @@
 import { HTTPException } from "hono/http-exception"
 
 export function getSpotifyAuthEndpoint(endpoint: string): string {
-    return "https://accounts.spotify.com" + endpoint
+    return "accounts.spotify.com" + endpoint
 }
 
 export async function exchangeCodeForToken(

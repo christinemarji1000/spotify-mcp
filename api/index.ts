@@ -63,7 +63,7 @@ app.get('/sse', async (c, next) => {
     });
   }
   return streamSSE(c, async (stream) => {
-    await stream.writeSSE({ comment: 'heartbeat-' + 'x'.repeat(1024) });
+    await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) });
     await stream.sleep(100);
     const accessToken = c.get('spotifyAccessToken');
     const transport = new SSEServerTransport("/message", stream as any);

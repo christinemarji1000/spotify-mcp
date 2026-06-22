@@ -14,7 +14,7 @@ const app = new Hono<{ Bindings: Bindings }>()
 
 app.use(cors())
 
-app.get('/.well-known/oauth-authorization-server', async (c) => {
+app.get('//.well-known/oauth-authorization-server', async (c) => {
   const url = new URL(c.req.url)
   return c.json({
     issuer: url.origin,
@@ -28,7 +28,9 @@ app.get('/.well-known/oauth-authorization-server', async (c) => {
 app.get('/authorize', async (c) => {
   const spotifyAuthUrl = new URL(getSpotifyAuthEndpoint('authorize'))
   const url = new URL(c.req.url)
-  url.searchParams.forEach((v, k) => { if (k !== 'client_id') spotify AuthUrl.searchParams.set(k, v) })
+  url.searchParams.forEach((v, k) => {
+    if (k !== 'client_id') spo tifyAuthUrl.searchParams.set(k, v)
+  })
   spotifyAuthUrl.searchParams.set('client_id', process.env.SPOTIFY_CLIENT_ID!)
   return c.redirect(spotifyAuthUrl.toString())
 })
@@ -37,7 +39,7 @@ app.post('/token', async (c) => {
   const body = await c.req.parseBody()
   const clientId = process.env.SPOTIFY_CLIENT_ID!
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!
-  
+
   if (body.grant_type === 'authorization_code') {
     const result = await exchangeCodeForToken(body.code as string, body.redirect_uri as string, clientId, clientSecret, body.code_verifier as string)
     return c.json(result)
@@ -51,10 +53,8 @@ app.post('/token', async (c) => {
 app.get('/sse', spotifyBearerTokenAuthMiddleware, async (c) => {
   const transport = new SSEServerTransport("/message", c.res as any)
   const accessToken = c.get('spotifyAccessToken')
-  
   const mcpServer = createSpotifyMCPServer(process.env, accessToken)
   await mcpServer.connect(transport)
-
   return new Response(null, { status: 200 })
 })
 

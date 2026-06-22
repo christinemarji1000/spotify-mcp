@@ -64,6 +64,7 @@ app.get('/sse', async (c, next) => {
   }
   return streamSSE(c, async (stream) => {
     await stream.writeSSE({ comment: 'heartbeat' });
+    await stream.sleep(100);
     const accessToken = c.get('spotifyAccessToken');
     const transport = new SSEServerTransport("/message", stream as any);
     const mcpServer = createSpotifyMCPServer(process.env, accessToken);

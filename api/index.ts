@@ -4,10 +4,8 @@ import { cors } from "hono/cors";
 import { Hono } from "hono";
 import { handle } from 'hono/vercel';
 
-// Export the SpotifyMCP class so the Worker runtime can find it
 export { SpotifyMCP };
 
-// Define the environment bindings
 type Bindings = {
   SPOTIFY_CLIENT_ID: string;
   SPOTIFY_CLIENT_SECRET: string;
@@ -17,7 +15,6 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 app.use(cors());
 
-// OAuth Authorization Server Discovery
 app.get('/.well-known/oauth-authorization-server', async (c) => {
   const url = new URL(c.req.url);
   return c.json({
@@ -32,16 +29,14 @@ app.get('/.well-known/oauth-authorization-server', async (c) => {
     code_challenge_methods_supported: ['S256'],
     scopes_supported: [
       'user-read-private', 'user-read-email', 'user-read-playback-state',
-      'user-modify-playback-state', 'user-read-currently-playing
-',
+      'user-modify-playback-state', 'user-read-currently-playing',
       'user-read-recently-played', 'user-top-read', 'playlist-read-private',
-      'playlist-read-collaborative', 'playlist-modify-public',
+      'playlist-read-collaborative', 'playlist-modify-public ',
       'playlist-modify-private', 'user-library-read', 'user-library-modify'
     ],
   });
 });
 
-// Authorization endpoint
 app.get('/authorize', async (c) => {
   const url = new URL(c.req.url);
   const spotifyAuthUrl = new URL(getSpotifyAuthEndpoint('authorize'));
@@ -54,7 +49,6 @@ app.get('/authorize', async (c) => {
   return c.redirect(spotifyAuthUrl.toString());
 });
 
-// Token endpoint
 app.post('/token', async (c) => {
   const body = await c.req.parseBody();
   if (body.grant_type === 'authorization_code') {
@@ -73,21 +67,17 @@ app.post('/token', async (c) => {
       c.env.SPOTIFY_CLIENT_SECRET
     );
     return c.json(result);
-
   }
   return c.json({ error: 'unsupported_grant_type' }, 400);
 });
 
-// MCP endpoints
 app.use('/sse/*', spotifyBearerTokenAuthMiddleware);
-app.route('/sse', new Hono().mount('/', SpotifyMCP.serveSSE('/sse', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
+app.route('/sse', new Hono().mount('/', SpotifyMCP.serveSSE('/s se', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
 app.use('/mcp', spotifyBearerTokenAuthMiddleware);
 app.route('/mcp', new Hono().mount('/', SpotifyMCP.serve('/mcp', { binding: 'SPOTIFY_MCP_OBJECT' }).fetch));
 
-// Health check
 app.get('/', (c) => c.text('Spotify MCP Server is running'));
 
-// Export handlers for Vercel
 export const GET = handle(app);
 export const POST = handle(app);
 export const PUT = handle(app);

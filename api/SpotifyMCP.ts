@@ -10,7 +10,7 @@ export function createSpotifyMCPServer(env: any, accessToken: string, refreshTok
       content: [
         {
           type: "text",
-          `text: Success! ${description}\n\nResult:\n${JSON.stringify(data, null, 2)}`
+          text: `Success! ${description}\n\nResult:\n${JSON.stringify(data, null, 2)}`
         }
       ]
     }

@@ -1,5 +1,5 @@
-import { getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken } from "./lib/spotify-auth"
-import { createSpotifyMCPServer } from './SpotifyMCP'
+import { getSpotifyAuthEndpoint, exchangeCodeForToken, refreshAccessToken } from "./lib/spotify-auth.js"
+import { createSpotifyMCPServer } from './SpotifyMCP.js'
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
 import { cors } from "hono/cors"
 import { Hono } from "hono"

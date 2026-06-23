@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["api/*/"]
+  "include": ["api//"]
 }

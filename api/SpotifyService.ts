@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Env } from '../types.js'
+import type { Env } from '../types.js'
 export class SpotifyService {
     private env: Env
     private accessToken: string

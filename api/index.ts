@@ -43,9 +43,16 @@ app.get('/authorize', async (c) => {
   return c.redirect(spotifyAuthUrl.toString())
 })
 
+app.get('/callback', (c) => {
+  return c.html(`
+    
+      <h1 style="color: #1DB954;">Successfully Authorized!
+      <p>You can now close this window and return to Poke.
+    
+  `)
+})
+
 app.post('/token', async (c) => {
-  app.get('/callback', (c) => {
-  return c.html( <h1 style="color: #1DB954;">Successfully Authorized! <p>You can now close this window and return to Poke. )
 })
   const body = await c.req.parseBody()
   const clientId = process.env.SPOTIFY_CLIENT_ID!

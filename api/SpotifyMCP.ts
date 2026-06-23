@@ -52,7 +52,7 @@ export function createSpotifyMCPServer(env: any, accessToken: string, refreshTok
 
   server.tool('pausePlayback', "Pause the user's playback", {}, async () => {
     await spotifyService.pausePlayback()
-    retu rn formatResponse('Playback paused', {})
+    return formatResponse('Playback paused', {})
   })
 
   server.tool('resumePlayback', "Resume the user's playback", {}, async () => {

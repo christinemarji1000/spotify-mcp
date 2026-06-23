@@ -13,7 +13,14 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-app.use(cors())
+app.use('*', cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'X-Poke-Validator'],
+  exposeHeaders: ['Content-Length'],
+  maxAge: 600,
+  credentials: true,
+}))
 app.get('/health', (c) => {
   return c.json({ status: "ok" })
   })

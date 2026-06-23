@@ -60,6 +60,8 @@ app.get('/callback', (c) => {
 })
 
 app.post('/token', async (c) => {
+  const mcpServer = createSpotifyMCPServer(process.env, accessToken)
+const body = await c.req.json()
   const body = await c.req.parseBody()
   const clientId = process.env.SPOTIFY_CLIENT_ID!
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!

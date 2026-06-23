@@ -67,20 +67,42 @@ app.post('/token', async (c) => {
   return c.json({ error: 'unsupported_grant_type' }, 400)
 })
 
+const transports = new Map<string, any>()
+
 app.get('/sse', async (c) => {
   c.header('X-Accel-Buffering', 'no')
+  c.header('Content-Type', 'text/event-stream')
+  c.header('Cache-Control', 'no-cache')
+
   return streamSSE(c, async (stream) => {
-    await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) })
     const authHeader = c.req.header('Authorization')
     const accessToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : ""
+    
     const transport = new SSEServerTransport("/message", stream as any)
+    transports.set(transport.sessionId, transport)
+
     const mcpServer = createSpotifyMCPServer(process.env, accessToken)
     await mcpServer.connect(transport)
-    while (true) { await stream.sleep(1000) }
+
+    stream.onAbort(() => {
+      transports.delete(transport.sessionId)
+    })
+
+    while (true) {
+      await stream.sleep(30000)
+    }
   })
 })
+
 app.post('/message', async (c) => {
-  return c.json({ message: "Message received" })
+  const sessionId = c.req.query('sessionId')
+  const transport = sessionId ? transports.get(sessionId) : null
+
+  if (transport) {
+    await transport.handlePostMessage(c.req.raw as any, c.res.raw as any)
+  } else {
+    return c.json({ error: "Session not found" }, 404)
+  }
 })
 
 app.get('/', (c) => c.text('Spotify MCP Server is running'))

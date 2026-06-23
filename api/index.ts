@@ -116,17 +116,7 @@ app.post('/message', async (c) => {
   const mcpServer = createSpotifyMCPServer(process.env, accessToken)
   const body = await c.req.json()
   const response = await mcpServer.handleRequest(body)
-  return c.json(response)
-})
-
-  // Stateless Fallback for Vercel/HTTP
-  const authHeader = c.req.header('Authorization')
-  const accessToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : ""
-  const mcpServer = createSpotifyMCPServer(process.env, accessToken)
-  const body = await c.req.json()
-  const response = await mcpServer.handleRequest(body)
-  return c.json(response)
-})
+  return c.json(
 
 app.get('/', (c) => c.text('Spotify MCP Server is running'))
 

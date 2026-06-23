@@ -1,8 +1,10 @@
 {
-	"files": [],
-	"references": [
-		{
-			"path": "./tsconfig.worker.json"
-		}
-	]
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["api/*/"]
 }

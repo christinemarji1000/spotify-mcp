@@ -121,4 +121,7 @@ app.post('/message', async (c) => {
 
 app.get('/', (c) => c.text('Spotify MCP Server is running'))
 
+export const GET = handle(app)
+export const POST = handle(app)
+export const OPTIONS = handle(app)
 export default handle(app)

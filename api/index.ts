@@ -68,6 +68,7 @@ app.post('/token', async (c) => {
 })
 
 app.get('/sse', async (c) => {
+  c.header('X-Accel-Buffering', 'no')
   return streamSSE(c, async (stream) => {
     await stream.writeSSE({ event: 'heartbeat', data: 'x'.repeat(1024) })
     const authHeader = c.req.header('Authorization')
